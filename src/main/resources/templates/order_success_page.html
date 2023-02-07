@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Success Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/src/main/resources/templates/fragments/mystyle.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <style>
+
+    </style>
+    <script>
+		$(document).ready(function () {
+			$('.navbar-light .dmenu').hover(function () {
+        	$(this).find('.sm-menu').first().stop(true, true).slideDown(150);
+    	}, function () {
+        $(this).find('.sm-menu').first().stop(true, true).slideUp(105)
+    });
+});
+	</script>
+</head>
+<body>
+
+<div th:replace="navbar/navbar.html"></div>
+<div class="container emp-profile" style="margin-top: 100px;">
+    <form method="get">
+        <div class="col-md-8">
+            <div class="tab-content profile-tab" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Order ID</label>
+                        </div>
+                        <div class="col-md-6">
+                            <label th:text="${order.id}"></label>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Total Price</label>
+                        </div>
+                        <div class="col-md-6">
+                            <label th:text="${order.fullPrice}"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

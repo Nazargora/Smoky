@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Hookah Store Home Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+		.social-part .fa{
+    		padding-right:20px;
+		}
+		ul li a{
+    		margin-right: 20px;
+		}
+	</style>
+    <script>
+		$(document).ready(function () {
+			$('.navbar-light .dmenu').hover(function () {
+        	$(this).find('.sm-menu').first().stop(true, true).slideDown(150);
+    	}, function () {
+        $(this).find('.sm-menu').first().stop(true, true).slideUp(105)
+    });
+});
+	</script>
+</head>
+<body>
+
+<div th:replace="navbar/navbar.html"></div>
+<h1 style ="color: white;">Description</h1>
+<p style ="color: white;">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Praesent scelerisque neque neque, ac elementum quam dignissim interdum.
+    Phasellus et placerat elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Praesent scelerisque neque neque, ac elementum quam dignissim interdum.
+    Phasellus et placerat elit.
+</p>
+</div>
+<div style ="color: white;">&copy; 2023 The Hookah Shop</div>
+<style th:inline="text">
+    body{
+        background-image: url(images/bg.png);
+    }
+</style>
+</body>
+</html>

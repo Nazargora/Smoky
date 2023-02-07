@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>NavigationBar</title>
+    <link rel="stylesheet" type="text/css" href="/src/main/resources/templates/fragments/mystyle.css"
+          xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-sm   navbar navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <a class="navbar-brand">Hookah Store</a>
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/hookahs">Hookahs</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/tobacco">Tobaccos</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li sec:authorize="isAuthenticated()" class="nav-link">
+                <a class="nav-link" href="/orders/current">Orders <span class="glyphicon glyphicon-log-in"></span></a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-link">
+                <a class="nav-link" href="/user_info">
+                    <span sec:authentication="name" class="glyphicon glyphicon-log-in"></span>
+                    <span class="glyphicon glyphicon-log-in"></span></a>
+            </li>
+            <li sec:authorize="isAnonymous()" class="nav-link">
+                <a class="nav-link" href="/login">Login <span class="glyphicon glyphicon-log-in"></span></a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-link">
+                <a class="nav-link" href="/logout">Sing Out <span class="glyphicon glyphicon-log-in"></span></a>
+            </li>
+            <li sec:authorize="isAnonymous()" class="nav-link">
+                <a class="nav-link" href="/registration">Sing Up <span class="glyphicon glyphicon-log-in"></span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+</body>
+</html>

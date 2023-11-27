@@ -19,7 +19,7 @@
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/hookahs">Hookahs</a>
+		    <a th:href="@{'/hookahs'}" class="nav-link">Hookahs<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/tobacco">Tobaccos</a>
@@ -35,13 +35,13 @@
                     <span class="glyphicon glyphicon-log-in"></span></a>
             </li>
             <li sec:authorize="isAnonymous()" class="nav-link">
-                <a class="nav-link" href="/login">Login <span class="glyphicon glyphicon-log-in"></span></a>
+		    <a th:href="@{'/login'}" class="nav-link">Login<span class="glyphicon glyphicon-log-in"></span></a>
             </li>
             <li sec:authorize="isAuthenticated()" class="nav-link">
                 <a class="nav-link" href="/logout">Sing Out <span class="glyphicon glyphicon-log-in"></span></a>
             </li>
             <li sec:authorize="isAnonymous()" class="nav-link">
-                <a class="nav-link" href="/registration">Sing Up <span class="glyphicon glyphicon-log-in"></span></a>
+		    <a th:href="@{'/registration'}" class="nav-link">Sing Up<span class="glyphicon glyphicon-log-in">(current)</span></a>
             </li>
         </ul>
     </div>

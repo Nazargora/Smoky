@@ -1,0 +1,82 @@
+name: Java CI with Maven, MySQL, Tomcat, and Nginx
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: hookah_shop
+          MYSQL_USER: sammy
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_AUTH_PLUGIN: mysql_native_password
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes  # Allow empty password for root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Configure MySQL User
+      run: |
+        mysql -h 127.0.0.1 -u root --password=${{ secrets.MYSQL_ROOT_PASSWORD }} -e "ALTER USER 'sammy'@'%' IDENTIFIED WITH mysql_native_password BY '${{ secrets.MYSQL_PASSWORD }}'; FLUSH PRIVILEGES;"
+
+    - name: Build and test with Maven
+      run: mvn -B verify
+
+    - name: Package WAR file
+      run: mvn -B package --file pom.xml
+
+    - name: Deploy to Tomcat
+      run: |
+        mkdir $HOME/tomcat
+        wget -qO- https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz | tar xvz --directory $HOME/tomcat --strip-components=1
+        cp /home/runner/work/Smoky/Smoky/target/Hookah.war $HOME/tomcat/webapps/
+        ls $HOME/tomcat/webapps/
+
+    - name: Start Tomcat
+      run: $HOME/tomcat/bin/startup.sh
+
+    - name: Install Nginx
+      run: sudo apt-get install -y nginx
+
+    - name: Configure Nginx
+      run: |
+        sudo rm /etc/nginx/sites-enabled/default
+        sudo tee /etc/nginx/sites-available/default > /dev/null <<EOF
+        server {
+            listen 80;
+            server_name hookahgora.store;  # Replace with your domain
+            location / {
+                proxy_pass http://127.0.0.1:8080;  # Assumes Tomcat is running on the default port
+                proxy_set_header Host \$host;
+                proxy_set_header X-Real-IP \$remote_addr;
+                proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto \$scheme;
+            }
+        }
+        EOF
+        sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+        sudo service nginx restart
+
+    - name: Check if everything is working
+      run: curl -I http://hookahgora.store

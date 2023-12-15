@@ -79,4 +79,7 @@ jobs:
         sudo service nginx restart
 
     - name: Check if everything is working
-      run: curl -I http://127.0.0.1
+      run: |
+        curl -I http://127.0.0.1
+        curl -I http://127.0.0.1:8080
+

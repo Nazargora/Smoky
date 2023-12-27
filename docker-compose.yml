@@ -1,40 +1,52 @@
 version: '3'
 
 services:
+  mysql:
+    image: mysql:latest
+    networks:
+      - hookah-network
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rib337yt43bUVYU
+      MYSQL_DATABASE: hookah_shop
+      MYSQL_USER: sammy
+      MYSQL_PASSWORD: rifubrib337yt43bUVYU
+    ports:
+      - "3306:3306"
+    
   tomcat:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: my_tomcat
-    network_mode: "host"
-    volumes:
-      - ./context.xml:/opt/tomcat/conf/context.xml
-   
+    container_name: tomcat
+    ports:
+      - "8080:8080"
+    networks:
+      - hookah-network
     depends_on:
       - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://0.0.0.0:3306/hookah_shop?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
-
-  mysql:
-    image: mysql:latest
-    container_name: my_mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: 1
-      MYSQL_DATABASE: hookah_shop
-      MYSQL_USER: sammy
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/hookah_shop?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
       MYSQL_PASSWORD: rifubrib337yt43bUVYU
-    network_mode: "host"
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - "./tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml"
+    entrypoint: |
+      bash -c 'cp -a webapps.dist/manager webapps/; exec catalina.sh run'
 
   nginx:
     image: nginx:latest
-    container_name: my_nginx
-    network_mode: "host"
+    container_name: nginx
+    ports:
+      - "80:80"
+    networks:
+      - hookah-network
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - tomcat
       - mysql
 
-    
+networks:
+  hookah-network:
+    driver: bridge

@@ -30,9 +30,10 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/hookah_shop?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
       MYSQL_PASSWORD: rifubrib337yt43bUVYU
     volumes:
-      - "./tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml"
+      - ./tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - ./context.xml:/usr/local/tomcat/webapps.dist/manager/META-INF/context.xml
     entrypoint: |
-      bash -c 'cp -a webapps.dist/manager webapps/; exec catalina.sh run'
+      bash -c 'cp -R webapps.dist/* webapps/; exec catalina.sh run'
 
   nginx:
     image: nginx:latest
